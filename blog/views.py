@@ -6,10 +6,12 @@ from django.db.models import Q
 from django.views import generic
 from django.contrib.postgres.search import SearchQuery
 from django.utils.html import escape
+from django.core.cache import cache
 
 from .models import Tag, Article
 
 logger = logging.getLogger('django')
+cache_timeout: int = 60
 
 
 class IndexView(generic.ListView):
@@ -21,6 +23,8 @@ class IndexView(generic.ListView):
         Return articles according conditions.
         """
 
+        cache_key: str = 'multi'
+
         query: str | None  = self.request.GET.get('q', None)
         tag: str | None  = self.request.GET.get('tag', None)
 
@@ -29,6 +33,7 @@ class IndexView(generic.ListView):
         if query is not None and query:
 
             clean_query = escape(query)
+            cache_key = f'{cache_key}-{clean_query}'
             post_query = SearchQuery(clean_query)
 
             conditions = Q(title__search=post_query)
@@ -37,6 +42,7 @@ class IndexView(generic.ListView):
         if tag is not None and tag:
 
             clean_tag = escape(tag)
+            cache_key = f'{cache_key}-{clean_tag}'
 
             if conditions is None:
                 conditions = Q(tags__name__exact=clean_tag)
@@ -44,22 +50,40 @@ class IndexView(generic.ListView):
                 conditions &= Q(tags__name__exact=clean_tag)
             ...
 
+        articles: QuerySet[Article] | None = cache.get(cache_key)
+
         if conditions is not None:
-            return Article.objects.filter(conditions).order_by('-id')[:3]
-        else:            
-            return Article.objects.all()[:3]
+            if articles is None:
+                articles = Article.objects.filter(conditions)[:3]
+                cache.set(cache_key, articles, timeout=cache_timeout)
+                ...
+                
+            return articles
+        else:
+            if articles is None:
+                articles = Article.objects.all()[:3]
+                cache.set(cache_key, articles, timeout=cache_timeout)
+                ...
+            return articles
     
     def get_context_data(self, *args, **kwargs) -> Mapping[str, Any]:
         """
         Return updated context with added Tags and previous query.
         """
         context = super().get_context_data(*args, **kwargs)
+        cache_key: str = 'tags'
         
         prev_query: str | None = self.request.GET.get('q', None)
         prev_tag: str | None = self.request.GET.get('tag', None)
-        
-        
-        context['tags'] = Tag.objects.all()
+
+        tags: QuerySet[Tag] | None = cache.get(cache_key)
+
+        if tags is None:
+            tags: QuerySet[Tag] = Tag.objects.all()
+            cache.set(cache_key, tags, timeout=cache_timeout)
+            ...
+            
+        context['tags'] = tags
         context['prev_query'] = escape(prev_query) if prev_query is not None else prev_query
         context['prev_tag'] = escape(prev_tag) if prev_tag is not None else prev_tag
         
@@ -76,8 +100,16 @@ class ArticlesView(generic.ListView):
         """
         Return all articles.
         """
+        cache_key: str = 'articles'
 
-        return Article.objects.all()
+        articles: QuerySet[Article] | None = cache.get(cache_key)
+
+        if articles is None:
+            articles: QuerySet[Article] = Article.objects.all()
+            cache.set(cache_key, articles, timeout=cache_timeout)
+            ...
+            
+        return articles
     ...
 
 

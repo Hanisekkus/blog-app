@@ -197,3 +197,11 @@ LOGGING = {
 FIXTURE_DIRS = [
     BASE_DIR / "website" / "fixtures"
 ]
+
+# Cache 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://redis:6379",
+    }
+}
