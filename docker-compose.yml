@@ -6,7 +6,7 @@ services:
       - DJANGO_SETTINGS_MODULE=website.settings
     command: >
      sh -c "python manage.py migrate &&
-            django-admin loaddata fixture &&
+            django-admin loaddata fixtures_auth fixtures_blog &&
             python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/app
@@ -19,6 +19,8 @@ services:
     image: postgres
     restart: always
     shm_size: 128mb
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_PASSWORD: password
     volumes:

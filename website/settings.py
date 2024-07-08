@@ -192,4 +192,8 @@ LOGGING = {
     },
 }
 
+# Fixtures
 
+FIXTURE_DIRS = [
+    BASE_DIR / "website" / "fixtures"
+]
