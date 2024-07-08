@@ -1,0 +1,28 @@
+services:
+  web:
+    build: .
+    restart: always
+    environment:
+      - DJANGO_SETTINGS_MODULE=website.settings
+    command: >
+     sh -c "python manage.py migrate &&
+            django-admin loaddata fixture &&
+            python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+  
+  postgres:
+    image: postgres
+    restart: always
+    shm_size: 128mb
+    environment:
+      POSTGRES_PASSWORD: password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

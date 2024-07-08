@@ -1,0 +1,76 @@
+{% load static %}
+
+<!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>{{ article.title }}</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'blog/assets/css/main.css' %}?{% now "U" %}" />
+		<noscript><link rel="stylesheet" href="{% static 'assets/css/noscript.css' %}?{% now "U" %}" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+				<header id="header">
+					<a href="{% url 'blog:index' %}" class="logo">Home</a>
+				</header>
+
+				<!-- Nav -->
+				<nav id="nav">
+					<ul class="links">
+						<li><a href="{% url 'blog:index' %}">Search</a></li>
+						<li><a href="{% url 'blog:articles' %}">List articles</a></li>
+						<li><a href="{% url 'blog:detail' article.id %}">Article id:{{ article.id }}</a></li>
+					</ul>
+					<ul class="icons">
+						<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+					</ul>
+				</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<section class="post">
+								<header class="major">
+									<h1>{{ article.title }}</h1>
+									{% if article.tags %}
+										<ul class="actions">
+										{% for tag in article.tags.all %}
+											<li><span class="button primary disabled">{{ tag.name }}</span></li>
+										{% endfor %}
+										</ul>
+									{% endif %}
+								</header>
+								<div class="image main"><img src="{{ article.image.url }}" alt="" /></div>
+								<p>{{ article.content }}</p>
+							</section>
+					</div>
+
+				<!-- Copyright -->
+					<div id="copyright">
+						<ul><li>&copy; honzakusak@seznam.cz</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="{% static 'blog/assets/js/jquery.min.js' %}?{% now "U" %}"></script>
+			<script src="{% static 'blog/assets/js/jquery.scrollex.min.js' %}?{% now "U" %}"></script>
+			<script src="{% static 'blog/assets/js/jquery.scrolly.min.js' %}?{% now "U" %}"></script>
+			<script src="{% static 'blog/assets/js/browser.min.js' %}?{% now "U" %}"></script>
+			<script src="{% static 'blog/assets/js/breakpoints.min.js' %}?{% now "U" %}"></script>
+			<script src="{% static 'blog/assets/js/util.js' %}?{% now "U" %}"></script>
+			<script src="{% static 'blog/assets/js/main.js' %}?{% now "U" %}"></script>
+
+	</body>
+</html>

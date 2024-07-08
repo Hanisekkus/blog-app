@@ -1,0 +1,105 @@
+{% load static %}
+
+<!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>List Articles</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'blog/assets/css/main.css' %}?{% now "U" %}" />
+		<noscript><link rel="stylesheet" href="{% static 'blog/assets/css/noscript.css' %}?{% now "U" %}" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper" class="fade-in">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="{% url 'blog:index' %}" class="logo">Home</a>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul class="links">
+							<li><a href="{% url 'blog:index' %}">Search</a></li>
+							<li class="active"><a href="{% url 'blog:articles' %}">List articles</a></li>
+						</ul>
+						<ul class="icons">
+							<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Form -->
+						<h1>List of articles</h1>
+
+						<!-- Posts -->
+						<section class="posts">
+							{% for article in articles %}
+							<article>
+								<header>
+									<h2><a href="{% url 'blog:detail' article.id %}">{{ article.title }}</a></h2>
+								</header>
+								<a href="{% url 'blog:detail' article.id %}" class="image fit"><img src="{{ article.thumb_image.url }}" alt="" /></a>
+								{% if article.tags %}
+									<h4>Tags:</h4>  
+									<ul class="actions">
+									{% for tag in article.tags.all %}
+										<li><span class="button primary disabled">{{ tag.name }}</span></li>
+									{% endfor %}
+									</ul>
+								{% endif %}
+								<ul class="actions special">
+									<li><a href="{% url 'blog:detail' article.id %}" class="button">Full Article</a></li>
+								</ul>
+							</article>
+							{% endfor %}
+						</section>
+
+						<!-- Footer -->
+						<footer>
+							<div class="pagination">
+								<span class="step-links">
+									{% if page_obj.has_previous %}
+										<a class="page" href="?page=1">&laquo; First</a>
+										<a class="page" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+									{% endif %}
+							
+									<a class="page active" href="?page={{ page_obj.number }}">{{ page_obj.number }}</a>
+							
+									{% if page_obj.has_next %}
+										<a class="page" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+										<a class="page" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+									{% endif %}
+								</span>
+								</div>
+						</footer>
+
+					</div>
+
+				<!-- Copyright -->
+					<div id="copyright">
+						<ul><li>&copy; honzakusak@seznam.cz</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="{% static 'blog/assets/js/jquery.min.js' %}?{% now "U" %}"></script>
+			<script src="{% static 'blog/assets/js/jquery.scrollex.min.js' %}?{% now "U" %}"></script>
+			<script src="{% static 'blog/assets/js/jquery.scrolly.min.js' %}?{% now "U" %}"></script>
+			<script src="{% static 'blog/assets/js/browser.min.js' %}?{% now "U" %}"></script>
+			<script src="{% static 'blog/assets/js/breakpoints.min.js' %}?{% now "U" %}"></script>
+			<script src="{% static 'blog/assets/js/util.js' %}?{% now "U" %}"></script>
+			<script src="{% static 'blog/assets/js/main.js' %}?{% now "U" %}"></script>
+
+	</body>
+</html>
