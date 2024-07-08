@@ -1,4 +1,5 @@
 {% load static %}
+{% load cache %}
 
 <!DOCTYPE HTML>
 <!--
@@ -86,9 +87,11 @@
 								{% if article.tags %}
 									<h4>Tags:</h4>
 									<ul class="actions">
-									{% for tag in article.tags.all %}
-										<li><span class="button primary disabled">{{ tag.name }}</span></li>
-									{% endfor %}
+									{% cache 60 article.tags.all article.id %}
+										{% for tag in article.tags.all %}
+											<li><span class="button primary disabled">{{ tag.name }}</span></li>
+										{% endfor %}
+									{% endcache%}
 									</ul>
 								{% endif %}
 								<ul class="actions special">
