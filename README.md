@@ -17,6 +17,14 @@ Aplikace vytvořena podle zadání. Tato aplikace se skládá z následujícího
 ## Rozcestník
 1) [Úvod](#blogovací-aplikace)
 2) [Analýza projektu](#analýza-projektu)
+    * [Modularite](#je-to-aplikace-či-projekt)
+    * [Databáze](#databáze)
+    * [Vytváření thumbnails](#vytváření-thumb-images)
+    * [Testování](#testování)
+    * [Úložiště](#úložiště)
+    * [Cachování](#cachování)
+    * [Logování](#logování)
+    * [Security](#security)
 3) [Jak rozjet](#jak-rozjet)
     * [Prerekvizity](#prerekvizity)
     * [1. krok](#1-krok-stáhnout-projekt)
@@ -48,6 +56,13 @@ Jeden z požadavků v zadání je z originálního obrázku vytvořit tzv. `thum
 
 * Otázka ukládání obrázků viz. [úložiště?](#úložiště)
 
+### Testování?
+Každá aplikace se musí testovat. Proto jsem vytvořil několik unit testů, co by měli pokrýt mé přidané chování aplikace.
+Pro testování používám nástroj [[coverage]](https://coverage.readthedocs.io), abych věděl co vše mám testy pokryté.
+
+### Úložiště?
+Momentálně se obrázky ukládají na File System aplikace, kde běží. Pro testovaní je to nejspíš v pořádku, každopádně pro produkční využití by mělo být vytvořeno nějaké externí úložiště jako je [[S3]](https://aws.amazon.com/s3/) pro ukládání těchto dat.
+
 ### Cachování?
 Jelikož se jedná o webovou aplikaci, která má potenciál zobrazovat málo se měnící se obsah, je vhodné v tuto chvíli zvolit možnost Cachování, aby se nedrtila databáze pro dotazy, které už byly vyřešeny dříve.
 
@@ -58,9 +73,6 @@ Pro produkční režim je vhodné, aby se celé chování naší webové aplikac
 
 Proto bych zvolil technologii [[Kibanu]](https://www.elastic.co/kibana)
 * *Každopádně Kibanu jsem nepřidával jelikož pro testovací aplikaci by to bylo nad rámec a nepřineslo by to žádné výhody (nehodlám danou testovací aplikaci nikam nasazovat)*
-
-### Úložiště?
-Momentálně se obrázky ukládají na File System aplikace, kde běží. Pro testovaní je to nejspíš v pořádku, každopádně pro produkční využití by mělo být vytvořeno nějaké externí úložiště jako je [[S3]](https://aws.amazon.com/s3/) pro ukládání těchto dat.
 
 ### Security?
 1) Aplikační: Naše aplikace vyžaduje od uživatele vstupy.
