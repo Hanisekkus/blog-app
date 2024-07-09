@@ -4,7 +4,7 @@ from typing import Mapping, Any
 from django.db.models.query import QuerySet
 from django.db.models import Q
 from django.views import generic
-from django.contrib.postgres.search import SearchQuery
+from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.utils.html import escape
 from django.core.cache import cache
 
@@ -21,21 +21,19 @@ class IndexView(generic.ListView):
         """
         Return articles according conditions.
         """
-
         cache_key: str = 'multi'
+        conditions = None
 
         query: str | None  = self.request.GET.get('q', None)
         tag: str | None  = self.request.GET.get('tag', None)
-
-        conditions = None
 
         if query is not None and query:
 
             clean_query = escape(query)
             cache_key = f'{cache_key}-{clean_query}'
-            post_query = SearchQuery(clean_query)
+            post_query = SearchQuery(clean_query, search_type='phrase')
 
-            conditions = Q(title__search=post_query)
+            conditions = Q(search=post_query)
             
         if tag is not None and tag:
 
@@ -51,7 +49,7 @@ class IndexView(generic.ListView):
 
         if conditions is not None:
             if articles is None:
-                articles = Article.objects.filter(conditions)[:3]
+                articles = Article.objects.annotate(search=SearchVector('title')).filter(conditions)[:3]
                 cache.set(cache_key, articles)
                 
             return articles
