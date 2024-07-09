@@ -194,11 +194,16 @@ FIXTURE_DIRS = [
     BASE_DIR / "website" / "fixtures"
 ]
 
+REDIS_CONFIG = {
+    "host": os.environ.get("REDIS_HOST", "redis"),
+    "timeout": 300,
+}
+
 # CACHES configuration
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://redis:6379",
-        "TIMEOUT": 300,
+        "LOCATION": f"redis://{REDIS_CONFIG['host']}:6379",
+        "TIMEOUT": REDIS_CONFIG['timeout'],
     }
 }
