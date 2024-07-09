@@ -85,8 +85,7 @@ Proto bych zvolil technologii [[Kibanu]](https://www.elastic.co/kibana)
 V této sekci je sepsáno jak daný projekt rozjet.
 
 ### Prerekvizity
-Pro možnost spuštení projektu je nutné mít nainstalovaný [[Docker]](https://www.docker.com/)
-
+Pro možnost spuštení projektu je nutné mít nainstalovaný [[Docker]](https://www.docker.com/) a [[git]](https://git-scm.com/)
 
 ### [1. krok] Stáhnout projekt
 Spusťte si terminal a zadejte:
