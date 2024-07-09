@@ -17,7 +17,7 @@ Aplikace vytvořena podle zadání. Tato aplikace se skládá z následujícího
 ## Rozcestník
 1) [Úvod](#blogovací-aplikace)
 2) [Analýza projektu](#analýza-projektu)
-    * [Modularite](#je-to-aplikace-či-projekt)
+    * [Modularita](#je-to-aplikace-či-projekt)
     * [Databáze](#databáze)
     * [Vytváření thumbnails](#vytváření-thumb-images)
     * [Testování](#testování)
