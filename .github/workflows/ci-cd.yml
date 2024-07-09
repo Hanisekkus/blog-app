@@ -24,7 +24,7 @@ jobs:
 
       redis:
         image: redis
-        # Set health checks to wait until postgres has started
+        # Set health checks to wait until redis has started
         options: >-
           --health-cmd "redis-cli ping"
           --health-interval 10s

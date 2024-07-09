@@ -28,7 +28,7 @@ urlpatterns: Sequence[URLResolver] = [
     path('admin/', admin.site.urls),  # Include the admin URLs
 ]
 
-# Add debug toolbar URLs if the application is not running tests
+# Add debug toolbar URLs if the application is not being tested
 if not CONFIG_DEFAULTS['IS_RUNNING_TESTS']:
     urlpatterns = [
         *urlpatterns,

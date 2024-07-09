@@ -33,9 +33,7 @@ class Article(models.Model):
         return File(thumbnail_image, name=f'thumb_{self.image.name}')
     
     def save(self, *args, **kwargs):
-
         self.thumb_image = self.create_thumbnail()
-
         super().save(*args, **kwargs)
 
     def __str__(self) -> str:
