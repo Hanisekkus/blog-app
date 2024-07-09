@@ -38,10 +38,14 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run migrations
+      env:
+        POSTGRES_HOST: 127.0.0.1
       run: |
         python manage.py migrate        
 
     - name: Run Tests
+      env:
+        POSTGRES_HOST: 127.0.0.1
       run: |
         echo "Running unit tests..."
         coverage run --source='.' manage.py test blog/tests
