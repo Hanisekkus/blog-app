@@ -6,7 +6,7 @@ Aplikace vytvořena podle zadání. Tato aplikace se skládá z následujícího
     * detail: individuální detail článků pro zobrazení veškerých informací
 * 1 admin stránky: pro možnost vytváření/upravování/smazání článku nebo tagu
 * grafické zpracování pomocí HTML templatu: [[aj@lkn.io | @ajlkn]](https://html5up.net/massively)
-* analýzy projektu: [link](#analyza-projektu)
+* analýzy projektu: [link](#analýza-projektu)
 * možnosti snadného rozjetí ([link](#jak-rozjet)) pomocí:
     * docker-compose souboru
     * základních fixtures
@@ -15,13 +15,14 @@ Aplikace vytvořena podle zadání. Tato aplikace se skládá z následujícího
     * testovací CI/CD pro [[github]](https://github.com/Hanisekkus/blog-app)
 
 ## Rozcestník
-1) [Úvod](#blogovaci-aplikace)
-2) [Analýza projektu](#analyza-projektu)
+1) [Úvod](#blogovací-aplikace)
+2) [Analýza projektu](#analýza-projektu)
 3) [Jak rozjet](#jak-rozjet)
     * [Prerekvizity](#prerekvizity)
-    * [1. krok](#1-krok-stahnout-projekt)
-    * [2. krok](#2-krok-spustte-docker-compose)
-    * [3. krok](#3-krok-overeni)
+    * [1. krok](#1-krok-stáhnout-projekt)
+    * [2. krok](#2-krok-spusťte-docker-compose)
+    * [3. krok](#3-krok-ověření)
+    * [4. krok](#4-krok-příhlášení-se-k-admin-stránkám)
 
 
 ## Analýza projektu
@@ -32,16 +33,20 @@ Z pohledu zadání je možné vyvíjet jak projekt, tak aplikaci. Každopádně 
 Ačkoli aplikace byla vyvinuta v jako Django aplikace, nebylo aplikována možnost vytvoření Pypi balíčku, přišlo mi to nad rámec zadání.
 
 ### Databáze?
-V základu Django vytváří SqlLite databázi, která je skvělá pro mnoho případů použití. Každopádně, po projetí požadavků jsem si zvolil databázi Postgresql z nekolika důvodů.
+V základu Django vytváří SQLite databázi, která je skvělá pro mnoho případů použití. Každopádně, po projetí požadavků jsem si zvolil databázi Postgresql z nekolika důvodů.
 
-* Možnost využít fulltextové hledání. Jeden z požadavků je možnost vyhledávat v databázi podle vstupu uživatele a podle mě je fulltextové hledání přesně to co se k tomu hodí.
+* Skvělá integrace s Djangem pomocí contrib aplikace.
+
+* V tomto případě sice ne tak důležité, ale snazší škalovatelnost atd.
+
+* Hlavní bod v mém případě je možnost využít fulltextového hledání. Jeden z požadavků je možnost vyhledávat v databázi podle vstupu uživatele a podle mě je fulltextové hledání přesně to co se k tomu hodí.
 
 ### Vytváření thumb images?
 Jeden z požadavků v zadání je z originálního obrázku vytvořit tzv. `thumbnail` obrázek. Po rozmyšlení jsem se rozhodl daný obrázek vytvářet již při požadavku na vytvoření záznamu v databázi a přidat jej k danému záznamu. Díky tomu má naše aplikace už v databázi daný obrázek uložený a nemusí jej každým požadavkem znova vytvářet.
 
-* Django v základu obrázky nemaže, ani po smazání záznamu v databázi. Je to z důvodů možnosti použití rollbacků a dalšího viz. [[link]](). Proto jsem totu chování zanechal, zadání nijak nespecifikuje co s obrázky dělat.
+* Django v základu obrázky nemaže, ani po smazání záznamu v databázi. Je to z důvodů možnosti použití rollbacků a nemožnosti vědět zdali daný obrázek není používán jiným modelem, či systémem. Proto jsem totu chování zanechal. Zadání nijak nespecifikuje co s obrázky v takovém případě dělat.
 
-* Otázka ukládání obrázků viz. [úložiště?](#uloziste)
+* Otázka ukládání obrázků viz. [úložiště?](#úložiště)
 
 ### Cachování?
 Jelikož se jedná o webovou aplikaci, která má potenciál zobrazovat málo se měnící se obsah, je vhodné v tuto chvíli zvolit možnost Cachování, aby se nedrtila databáze pro dotazy, které už byly vyřešeny dříve.
