@@ -35,7 +35,6 @@ ALLOWED_HOSTS = ['*']
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -49,6 +48,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -56,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 ROOT_URLCONF = 'website.urls'
@@ -72,6 +74,7 @@ TEMPLATES = [
                 "django.template.context_processors.media",
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'blog.context_processors.cache',
             ],
         },
     },
@@ -82,7 +85,6 @@ WSGI_APPLICATION = 'website.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 POSTGRES_CONFIG = {
     "username": os.environ.get("POSTGRES_USER", "postgres"),
     "db_name": os.environ.get("POSTGRES_DB", "postgres"),
@@ -105,7 +107,6 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -136,17 +137,14 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
-
 STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Django debug toolbar
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#configure-internal-ips
-
 INTERNAL_IPS = []
 
 if not CONFIG_DEFAULTS['IS_RUNNING_TESTS']:
@@ -163,14 +161,13 @@ if not CONFIG_DEFAULTS['IS_RUNNING_TESTS']:
         *INTERNAL_IPS,
         *['.'.join(ip.split('.')[:-1] + ['1']) for ip in ips]
     ]
-    ...
+    
 
-
+# Media files configuration
 MEDIA_URL = 'media/'
 MEDIA_ROOT = 'media/'
 
-# Django logger
-
+# Logging configuration
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -192,16 +189,16 @@ LOGGING = {
     },
 }
 
-# Fixtures
-
+# Fixture directories
 FIXTURE_DIRS = [
     BASE_DIR / "website" / "fixtures"
 ]
 
-# Cache 
+# CACHES configuration
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": "redis://redis:6379",
+        "TIMEOUT": 300,
     }
 }

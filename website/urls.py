@@ -22,23 +22,24 @@ from django.conf import settings
 
 from debug_toolbar.settings import CONFIG_DEFAULTS
 
-
+# Define the urlpatterns list to store the URL patterns
 urlpatterns: Sequence[URLResolver] = [
-    path("blog/", include("blog.urls")),
-    path('admin/', admin.site.urls),
+    path("blog/", include("blog.urls")),  # Include the URLs from the 'blog' app
+    path('admin/', admin.site.urls),  # Include the admin URLs
 ]
 
+# Add debug toolbar URLs if the application is not running tests
 if not CONFIG_DEFAULTS['IS_RUNNING_TESTS']:
     urlpatterns = [
         *urlpatterns,
         path("__debug__/", include("debug_toolbar.urls")),
     ]
-    ...
 
+# Add static URLs for media files if DEBUG mode is enabled
 if settings.DEBUG:
     from django.conf.urls.static import static
     urlpatterns = [
         *urlpatterns,
         *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     ]
-    ...
+    

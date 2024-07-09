@@ -8,7 +8,7 @@ from .models import Tag, Article
 class TagsInline(admin.TabularInline):
     model: Tag = Article.tags.through
     extra: int = 3
-    ...
+    
 
 
 class ArticleAdmin(admin.ModelAdmin):
@@ -24,7 +24,7 @@ class ArticleAdmin(admin.ModelAdmin):
     ]
     
     inlines: Sequence = [TagsInline] 
-    ...
+    
 
 
 admin.site.register(Article, ArticleAdmin)

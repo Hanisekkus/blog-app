@@ -10,9 +10,6 @@ class Tag(models.Model):
     
     def __str__(self) -> str:
         return self.name
-    
-    ...
-
 
 class Article(models.Model):
     title = models.CharField(max_length=50)
@@ -26,9 +23,6 @@ class Article(models.Model):
         ordering = ['-id']
 
     def create_thumbnail(self) -> File | None:
-        if self.image is None:
-            return None
-    
         thumbnail_image: BytesIO = BytesIO()
 
         im: Image.Image = Image.open(self.image.file).copy()
@@ -37,18 +31,12 @@ class Article(models.Model):
         im.close()
         
         return File(thumbnail_image, name=f'thumb_{self.image.name}')
-        
-        ...
     
     def save(self, *args, **kwargs):
 
         self.thumb_image = self.create_thumbnail()
 
         super().save(*args, **kwargs)
-        ...
-        
 
     def __str__(self) -> str:
         return self.title
-
-    ...

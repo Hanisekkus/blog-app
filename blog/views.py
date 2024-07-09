@@ -11,7 +11,6 @@ from django.core.cache import cache
 from .models import Tag, Article
 
 logger = logging.getLogger('django')
-cache_timeout: int = 60
 
 
 class IndexView(generic.ListView):
@@ -37,7 +36,6 @@ class IndexView(generic.ListView):
             post_query = SearchQuery(clean_query)
 
             conditions = Q(title__search=post_query)
-            ...
             
         if tag is not None and tag:
 
@@ -48,22 +46,20 @@ class IndexView(generic.ListView):
                 conditions = Q(tags__name__exact=clean_tag)
             else:
                 conditions &= Q(tags__name__exact=clean_tag)
-            ...
 
         articles: QuerySet[Article] | None = cache.get(cache_key)
 
         if conditions is not None:
             if articles is None:
                 articles = Article.objects.filter(conditions)[:3]
-                cache.set(cache_key, articles, timeout=cache_timeout)
-                ...
+                cache.set(cache_key, articles)
                 
             return articles
         else:
             if articles is None:
                 articles = Article.objects.all()[:3]
-                cache.set(cache_key, articles, timeout=cache_timeout)
-                ...
+                cache.set(cache_key, articles)
+                
             return articles
     
     def get_context_data(self, *args, **kwargs) -> Mapping[str, Any]:
@@ -79,16 +75,14 @@ class IndexView(generic.ListView):
         tags: QuerySet[Tag] | None = cache.get(cache_key)
 
         if tags is None:
-            tags: QuerySet[Tag] = Tag.objects.all()
-            cache.set(cache_key, tags, timeout=cache_timeout)
-            ...
+            tags = Tag.objects.all()
+            cache.set(cache_key, tags)
             
         context['tags'] = tags
         context['prev_query'] = escape(prev_query) if prev_query is not None else prev_query
         context['prev_tag'] = escape(prev_tag) if prev_tag is not None else prev_tag
         
         return context 
-    ...
 
 
 class ArticlesView(generic.ListView):
@@ -105,15 +99,12 @@ class ArticlesView(generic.ListView):
         articles: QuerySet[Article] | None = cache.get(cache_key)
 
         if articles is None:
-            articles: QuerySet[Article] = Article.objects.all()
-            cache.set(cache_key, articles, timeout=cache_timeout)
-            ...
+            articles = Article.objects.all()
+            cache.set(cache_key, articles)
             
         return articles
-    ...
 
 
 class DetailView(generic.DetailView):
     model = Article
     template_name = "blog/detail.html"
-    ...

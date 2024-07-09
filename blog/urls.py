@@ -6,6 +6,7 @@ from django.views.decorators.cache import cache_page
 from .models import *
 from . import views
 
+
 app_name: str = 'blog'
 urlpatterns: Sequence = [
     # ex: /blog/

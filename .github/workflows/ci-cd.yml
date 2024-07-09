@@ -24,6 +24,6 @@ jobs:
     - name: Run Tests
       run: |
         echo "Running unit tests..."
-        coverage run --source='.' manage.py test blog
+        coverage run --source='.' manage.py test blog/tests
         echo "Printing coverage report..."
         coverage report
