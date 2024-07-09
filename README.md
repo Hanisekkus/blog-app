@@ -108,7 +108,7 @@ docker-compose up
 ### [3. krok] Ověření
 Momentálně by vám měla aplikace již běžet, pro ověření si otevřete váš prohlížeč a zadejte tuto URL adresu: `http://127.168.0.1:8000/blog/` a měla by se vám zobrazit následující stránka
 
-![image](./images/success.png)
+![image](./git_images/success.png)
 
 ### [4. krok] Příhlášení se k admin stránkám
 Defaultně byly extrahovány fixtures již existujícího `superusera` aby nebylo nutné jej vytvářet.
