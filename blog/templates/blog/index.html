@@ -53,7 +53,7 @@
 						<!-- Form -->
 						<h1>search criteria</h1>
 
-						<form method="get" action="{% url 'blog:index' %}#header">
+						<form method="get" action="{% url 'blog:index' %}#nav">
 							<div class="row gtr-uniform">
 								<div class="col-12">
 									<input type="search" name="q" id="demo-name" placeholder="Search by title" {% if prev_query %} value={{ prev_query }} {% endif %} >
